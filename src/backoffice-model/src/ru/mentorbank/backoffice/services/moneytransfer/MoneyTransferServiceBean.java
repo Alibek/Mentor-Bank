@@ -1,7 +1,9 @@
+
 package ru.mentorbank.backoffice.services.moneytransfer;
 
 import ru.mentorbank.backoffice.dao.OperationDao;
 import ru.mentorbank.backoffice.model.stoplist.JuridicalStopListRequest;
+import ru.mentorbank.backoffice.model.stoplist.PhysicalStopListRequest;
 import ru.mentorbank.backoffice.model.stoplist.StopListInfo;
 import ru.mentorbank.backoffice.model.stoplist.StopListStatus;
 import ru.mentorbank.backoffice.model.transfer.AccountInfo;
@@ -20,11 +22,11 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 	private OperationDao operationDao;
 
 	public void transfer(TransferRequest request) throws TransferException {
-		// Создаём новый экземпляр внутреннего класса, для того, чтобы можно
-		// было хранить в состоянии объекта информацию по каждому запросу.
-		// Так как MoneyTransferServiceBean конфигурируется как singleton
-		// scoped, то в нём нельзя хранить состояние уровня запроса из-за
-		// проблем параллельного доступа.
+		// РЎРѕР·РґР°С‘Рј РЅРѕРІС‹Р№ СЌРєР·РµРјРїР»СЏСЂ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РєР»Р°СЃСЃР°, РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РјРѕР¶РЅРѕ
+		// Р±С‹Р»Рѕ С…СЂР°РЅРёС‚СЊ РІ СЃРѕСЃС‚РѕСЏРЅРёРё РѕР±СЉРµРєС‚Р° РёРЅС„РѕСЂРјР°С†РёСЋ РїРѕ РєР°Р¶РґРѕРјСѓ Р·Р°РїСЂРѕСЃСѓ.
+		// + РўР°Рє РєР°Рє MoneyTransferServiceBean РєРѕРЅС„РёРіСѓСЂРёСЂСѓРµС‚СЃСЏ РєР°Рє singleton
+		// scoped, С‚Рѕ РІ РЅС‘Рј РЅРµР»СЊР·СЏ С…СЂР°РЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ СѓСЂРѕРІРЅСЏ Р·Р°РїСЂРѕСЃР° РёР·-Р·Р°
+		// РїСЂРѕР±Р»РµРј РїР°СЂР°Р»Р»РµР»СЊРЅРѕРіРѕ РґРѕСЃС‚СѓРїР°.
 		new MoneyTransfer(request).transfer();
 	}
 
@@ -47,12 +49,12 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 				removeSuccessfulOperation();
 			} else
 				throw new TransferException(
-						"Невозможно сделать перевод. Необходимо ручное вмешательство.");
+						"РќРµРІРѕР·РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ РїРµСЂРµРІРѕРґ. РќРµРѕР±С…РѕРґРёРјРѕ СЂСѓС‡РЅРѕРµ РІРјРµС€Р°С‚РµР»СЊСЃС‚РІРѕ.");
 		}
 
 		/**
-		 * Если операция перевода прошла, то её нужно удалить из таблицы
-		 * операций для ручного вмешательства
+		 * Р•СЃР»Рё РѕРїРµСЂР°С†РёСЏ РїРµСЂРµРІРѕРґР° РїСЂРѕС€Р»Р°, С‚Рѕ РµС‘ РЅСѓР¶РЅРѕ СѓРґР°Р»РёС‚СЊ РёР· С‚Р°Р±Р»РёС†С‹
+		 * РѕРїРµСЂР°С†РёР№ РґР»СЏ СЂСѓС‡РЅРѕРіРѕ РІРјРµС€Р°С‚РµР»СЊСЃС‚РІР°
 		 */
 		private void removeSuccessfulOperation() {
 
@@ -64,13 +66,13 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 		}
 
 		private void saveOperation() {
-			// TODO: Необходимо сделать вызов операции saveOperation и сделать
-			// соответствующий тест вызова операции operationDao.saveOperation()
+			// TODO: РќРµРѕР±С…РѕРґРёРјРѕ СЃРґРµР»Р°С‚СЊ РІС‹Р·РѕРІ РѕРїРµСЂР°С†РёРё saveOperation Рё СЃРґРµР»Р°С‚СЊ
+			// СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ С‚РµСЃС‚ РІС‹Р·РѕРІР° РѕРїРµСЂР°С†РёРё operationDao.saveOperation()
 		}
 
 		private void transferDo() throws TransferException {
-			// Эту операцию пока не реализовавем. Она должна вызывать
-			// CDCMoneyTransferServiceConsumer которого ещё нет
+			// Р­С‚Сѓ РѕРїРµСЂР°С†РёСЋ РїРѕРєР° РЅРµ СЂРµР°Р»РёР·РѕРІР°РІРµРј. РћРЅР° РґРѕР»Р¶РЅР° РІС‹Р·С‹РІР°С‚СЊ
+			// CDCMoneyTransferServiceConsumer РєРѕС‚РѕСЂРѕРіРѕ РµС‰С‘ РЅРµС‚
 		}
 
 		private boolean isStopListInfoOK() {
@@ -90,7 +92,18 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 						.getJuridicalStopListInfo(request);
 				return stopListInfo;
 			} else if (accountInfo instanceof PhysicalAccountInfo) {
-				// TODO: Сделать вызов stopListService для физических лиц
+				PhysicalAccountInfo physicalAccountInfo = (PhysicalAccountInfo) accountInfo;
+				PhysicalStopListRequest request = new PhysicalStopListRequest();
+				request.setDocumentSeries(physicalAccountInfo
+						.getDocumentSeries());
+				request.setDocumentNumber(physicalAccountInfo
+						.getDocumentNumber());
+				request.setLastname(physicalAccountInfo.getLastname());
+				request.setFirstname(physicalAccountInfo.getFirstname());
+				request.setMiddlename(physicalAccountInfo.getMiddlename());
+				StopListInfo stopListInfo = stopListService
+						.getPhysicalStopListInfo(request);
+				return stopListInfo;
 			}
 			return null;
 		}
