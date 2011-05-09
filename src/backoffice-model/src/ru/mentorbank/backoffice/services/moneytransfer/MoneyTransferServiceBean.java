@@ -1,7 +1,10 @@
-
 package ru.mentorbank.backoffice.services.moneytransfer;
 
+import java.util.Calendar;
+import ru.mentorbank.backoffice.dao.exception.OperationDaoException;
 import ru.mentorbank.backoffice.dao.OperationDao;
+import ru.mentorbank.backoffice.model.Account;
+import ru.mentorbank.backoffice.model.Operation;
 import ru.mentorbank.backoffice.model.stoplist.JuridicalStopListRequest;
 import ru.mentorbank.backoffice.model.stoplist.PhysicalStopListRequest;
 import ru.mentorbank.backoffice.model.stoplist.StopListInfo;
@@ -40,7 +43,7 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 			this.request = request;
 		}
 
-		public void transfer() throws TransferException {
+		public void transfer() throws TransferException,OperationDaoException {
 			verifySrcBalance();
 			initializeStopListInfo();
 			saveOperation();
@@ -65,9 +68,33 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 			dstStopListInfo = getStopListInfo(request.getDstAccount());
 		}
 
-		private void saveOperation() {
-			// TODO: Необходимо сделать вызов операции saveOperation и сделать
-			// соответствующий тест вызова операции operationDao.saveOperation()
+		private void saveOperation() throws OperationDaoException {
+		        
+                        Operation operation = new Operation();
+			Account srcAccount = new Account();
+			Account dstAccount = new Account();
+		
+			operation.setCreateDate(Calendar.getInstance());
+			operation.setSentDate(Calendar.getInstance());
+			
+			operation.setSrcAccount(srcAccount);
+			operation.setDstAccount(dstAccount);
+			
+			srcAccount.setAccountNumber(request.getSrcAccount()
+					.getAccountNumber());
+
+			dstAccount.setAccountNumber(request.getDstAccount()
+					.getAccountNumber());
+
+			
+			operation.setDstStoplistInfo(dstStopListInfo);
+			operation.setSrcStoplistInfo(srcStopListInfo);
+
+			try {
+				operationDao.saveOperation(operation);
+			} catch (OperationDaoException daoEx) {
+				throw new OperationDaoException();
+			}
 		}
 
 		private void transferDo() throws TransferException {
@@ -117,7 +144,7 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 		}
 
 		private void verifySrcBalance() throws TransferException {
-			if (!accountService.verifyBalance(request.getDstAccount()))
+			if (!accountService.verifyBalance(request.getSrcAccount()))
 				throw new TransferException(LOW_BALANCE_ERROR_MESSAGE);
 		}
 	}
