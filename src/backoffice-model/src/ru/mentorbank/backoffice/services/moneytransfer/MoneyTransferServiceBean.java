@@ -31,6 +31,12 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 		// scoped, то в нём нельзя хранить состояние уровня запроса из-за
 		// проблем параллельного доступа.
 		new MoneyTransfer(request).transfer();
+               try {
+			new MoneyTransfer(request).transfer();
+		} catch (OperationDaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	class MoneyTransfer {
