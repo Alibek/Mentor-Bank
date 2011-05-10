@@ -60,7 +60,7 @@ public class MoneyTransferServiceTest extends AbstractSpringTest {
 	}
 
 	@Test
-	public void transfer() throws TransferException {
+	public void transfer() throws TransferException,OperationDaoException {
                 
                 when(mockAccountService.verifyBalance(any(AccountInfo.class)))
 				.thenReturn(true);
