@@ -30,7 +30,7 @@ public class MoneyTransferServiceBean implements MoneyTransferSerice {
 		// + Так как MoneyTransferServiceBean конфигурируется как singleton
 		// scoped, то в нём нельзя хранить состояние уровня запроса из-за
 		// проблем параллельного доступа.
-		new MoneyTransfer(request).transfer();
+		
                try {
 			new MoneyTransfer(request).transfer();
 		} catch (OperationDaoException e) {
